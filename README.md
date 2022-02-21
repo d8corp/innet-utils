@@ -114,7 +114,9 @@ import innet, { createHandler } from 'innet'
 import { number, logger } from '@innet/utils'
 
 const handler = createHandler([
-  number(logger(console.log)),
+  number([
+    logger(console.log),
+  ]),
 ])
 
 innet(null, handler)
