@@ -176,7 +176,9 @@ import innet, { createHandler } from 'innet'
 import { stop, logger, nullish } from '@innet/utils'
 
 const handler = createHandler([
-  nullish(stop),
+  nullish([
+    stop,
+  ]),
   logger(console.log),
 ])
 
