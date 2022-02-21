@@ -79,7 +79,9 @@ import innet, { createHandler } from 'innet'
 import { logger } from '@innet/utils'
 
 const handler = createHandler([
-  exist(logger(console.log)),
+  exist([
+    logger(console.log),
+  ]),
 ])
 
 innet(null, handler)
