@@ -318,7 +318,7 @@ import innet, { createHandler } from 'innet'
 import { array, arrayAsync, logger } from '@innet/utils'
 
 const handler = createHandler([
-  array(arrayAsync),
+  array([arrayAsync]),
   logger(console.log),
 ])
 
