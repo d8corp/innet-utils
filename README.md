@@ -6,9 +6,9 @@
 
 &nbsp;
 
-[![NPM](https://img.shields.io/npm/v/@innet/utils.svg)](https://github.com/d8corp/innet-utils/blob/main/CHANGELOG.md)
-[![minzipped size](https://img.shields.io/bundlephobia/minzip/@innet/utils)](https://bundlephobia.com/result?p=@innet/utils)
-[![downloads](https://img.shields.io/npm/dm/@innet/utils.svg)](https://www.npmjs.com/package/@innet/utils)
+[![NPM](https://img.shields.io/npm/v/@innet/utils.svg)](https://www.npmjs.com/package/@innet/utils)
+[![downloads](https://img.shields.io/npm/dm/@innet/utils.svg)](https://www.npmtrends.com/@innet/utils)
+[![changelog](https://img.shields.io/badge/Changelog-⋮-brightgreen)](https://changelogs.xyz/@innet/utils)
 [![license](https://img.shields.io/npm/l/@innet/utils)](https://github.com/d8corp/innet-utils/blob/main/LICENSE)
 
 ## Abstract
