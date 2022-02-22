@@ -6,7 +6,9 @@ describe('null', () => {
   it('runs for only null', () => {
     let count = 0
     const log = () => () => count++
-    const handler = createHandler([nullish([log])])
+    const handler = createHandler([
+      nullish([log])
+    ])
 
     innet(undefined, handler)
     innet([], handler)

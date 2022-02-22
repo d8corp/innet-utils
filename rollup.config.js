@@ -1,6 +1,5 @@
 import typescript from 'rollup-plugin-typescript2'
 import pkg from './package.json'
-import {terser} from 'rollup-plugin-terser'
 import glob from 'glob'
 
 const input = glob.sync('{src/index.ts,src/**/index.ts}')
@@ -36,20 +35,6 @@ export default [{
           target: 'es6',
         }
       }
-    })
-  ]
-}, {
-  input: 'src/innetUtils.min.ts',
-  output: {
-    file: 'lib/innetUtils.min.js',
-    format: 'iife',
-    name: 'innetUtils',
-    plugins: [terser()]
-  },
-  plugins: [
-    typescript({
-      rollupCommonJSResolveHack: false,
-      clean: true,
     })
   ]
 }]
