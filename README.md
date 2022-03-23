@@ -117,6 +117,71 @@ innet(1, handler)
 // > 1, handler
 ```
 
+## string
+This plugin handles only `string` values.
+
+```typescript
+import innet, { createHandler } from 'innet'
+import { string, logger } from '@innet/utils'
+
+const handler = createHandler([
+  string([
+    logger(console.log),
+  ]),
+])
+
+innet(null, handler)
+innet(1, handler)
+// nothing happens
+
+innet('1', handler)
+// > '1', handler
+```
+
+## fn
+This plugin handles only `function` values.
+
+```typescript
+import innet, { createHandler } from 'innet'
+import { fn, logger } from '@innet/utils'
+
+const handler = createHandler([
+  fn([
+    logger(console.log),
+  ]),
+])
+
+innet(null, handler)
+innet(1, handler)
+innet('1', handler)
+// nothing happens
+
+innet(() => {}, handler)
+// > () => {}, handler
+```
+
+## node
+This plugin handles only `Node` values.
+
+```typescript
+import innet, { createHandler } from 'innet'
+import { node, logger } from '@innet/utils'
+
+const handler = createHandler([
+  node([
+    logger(console.log),
+  ]),
+])
+
+innet(null, handler)
+innet(1, handler)
+innet('1', handler)
+// nothing happens
+
+innet(document.createElement('div'), handler)
+// > div, handler
+```
+
 ## stop
 This is a simple plugin to stop running of plugins and return application as is.
 ```typescript
@@ -134,26 +199,53 @@ innet(1, handler)
 
 The logger will not be run because of the `stop` plugin.
 
+## promise
+This plugin handles only `promise` values.
+
+```typescript
+import innet, { createHandler } from 'innet'
+import { promise, logger } from '@innet/utils'
+
+const handler = createHandler([
+  promise([
+    logger(console.log),
+  ]),
+])
+
+innet(null, handler)
+innet(1, handler)
+innet('1', handler)
+// nothing happens
+
+innet(
+  new Promise(resolve => resolve()),
+  handler,
+)
+// > promise, handler
+```
+
 ## async
 This plugin helps to work with async, just an example:
 ```typescript
 import innet, { createHandler } from 'innet'
-import { async, logger } from '@innet/utils'
+import { async, promise, logger } from '@innet/utils'
 
 const handler = createHandler([
-  async,
+  promise([
+    async,
+  ]),
   logger(console.log),
 ])
 
 innet(1, handler)
 // > 1, handler
 
-const promise = new Promise(resolve => resolve('test'))
+const app = new Promise(resolve => resolve('test'))
 
-innet(promise, handler)
+innet(app, handler)
 // nothing happens
 
-await promise
+await app
 // > 'test', handler
 ```
 
@@ -323,10 +415,10 @@ await promise
 You can combine it with `async` plugin to handle promises.
 ```typescript
 import innet, { createHandler } from 'innet'
-import { array, arrayAsync, async, logger } from '@innet/utils'
+import { array, arrayAsync, async, promise, logger } from '@innet/utils'
 
 const handler = createHandler([
-  async,
+  promise([async]),
   array([arrayAsync]),
   logger(console.log),
 ])
@@ -346,10 +438,10 @@ await result
 If a promise throws an error the handler get stop.
 ```typescript
 import innet, { createHandler } from 'innet'
-import { array, arrayAsync, async, logger } from '@innet/utils'
+import { array, arrayAsync, async, promise, logger } from '@innet/utils'
 
 const handler = createHandler([
-  async,
+  promise([async]),
   array([arrayAsync]),
   logger(console.log),
 ])

@@ -1,5 +1,7 @@
 import innet, { createHandler } from 'innet'
 
+import { promise } from '../promise'
+
 import { async } from '.'
 
 describe('async', () => {
@@ -10,7 +12,7 @@ describe('async', () => {
     const app2 = new Promise(resolve => resolve([7, 13]))
 
     const handler = createHandler([
-      async,
+      promise([async]),
       sum,
     ])
 

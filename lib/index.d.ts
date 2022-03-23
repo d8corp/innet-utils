@@ -7,3 +7,7 @@ export * from './stop';
 export * from './async';
 export * from './array';
 export * from './number';
+export * from './string';
+export * from './fn';
+export * from './node';
+export * from './promise';

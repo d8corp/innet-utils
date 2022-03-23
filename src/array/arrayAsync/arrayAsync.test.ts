@@ -1,6 +1,6 @@
 import innet, { createHandler } from 'innet'
 
-import { array, arrayAsync, async, logger } from '../..'
+import { array, arrayAsync, async, promise, logger } from '../..'
 
 describe('arrayAsync', () => {
   test('example', async () => {
@@ -33,7 +33,7 @@ describe('arrayAsync', () => {
     const log = jest.fn()
 
     const handler = createHandler([
-      async,
+      promise([async]),
       array([arrayAsync]),
       logger(log),
     ])
@@ -43,14 +43,14 @@ describe('arrayAsync', () => {
     expect(log).toBeCalledTimes(1)
     expect(log).toBeCalledWith('test1', handler)
 
-    const promise = new Promise(resolve => resolve('test3'))
+    const app = new Promise(resolve => resolve('test3'))
 
-    const result = innet(['test2', promise, 'test4'], handler)
+    const result = innet(['test2', app, 'test4'], handler)
 
     expect(log).toBeCalledTimes(2)
     expect(log).toBeCalledWith('test2', handler)
 
-    await promise
+    await app
 
     expect(log).toBeCalledTimes(3)
     expect(log).toBeCalledWith('test3', handler)
@@ -65,14 +65,14 @@ describe('arrayAsync', () => {
     const logError = jest.fn()
 
     const handler = createHandler([
-      async,
+      promise([async]),
       array([arrayAsync]),
       logger(log),
     ])
 
-    const promise = new Promise((resolve, reject) => reject(Error()))
+    const app = new Promise((resolve, reject) => reject(Error()))
 
-    const result = innet(['test1', promise, 'test2'], handler)
+    const result = innet(['test1', app, 'test2'], handler)
 
     expect(log).toBeCalledTimes(1)
     expect(log).toBeCalledWith('test1', handler)
