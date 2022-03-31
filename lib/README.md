@@ -528,6 +528,51 @@ innet(['test1', ['test2', undefined]], handler)
 // ['test1', 'test2]
 ```
 
+### iterable
+You can use it to eject iterable objects
+
+```typescript
+import innet, { createHandler } from 'innet'
+import { .iterable, logger } from '@innet/utils'
+
+const handler = createHandler([
+  iterable([
+    logger(console.log),
+  ]),
+])
+
+innet([1, 2, 3], handler)
+// [1, 2, 3], handler
+innet(new Set([1, 2, 3]), handler)
+// Set([1, 2, 3]), handler
+
+innet({}, handler)
+// nothing happens
+```
+
+### asyncIterable
+You can use it to eject async iterable objects
+
+```typescript
+import innet, { createHandler } from 'innet'
+import { asyncIterable, logger } from '@innet/utils'
+
+const handler = createHandler([
+  asyncIterable([
+    logger(console.log),
+  ]),
+])
+
+innet([1, 2, 3], handler)
+innet(new Set([1, 2, 3]), handler)
+// nothing happens
+
+async function * test () {}
+
+innet(test(), handler)
+// Promise, handler
+```
+
 ## Issues
 If you find a bug or have a suggestion, please file an issue on [GitHub](https://github.com/d8corp/innet-utils/issues).
 

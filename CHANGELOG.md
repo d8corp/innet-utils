@@ -2,6 +2,9 @@
 
 ## v1.1
 
+### v1.1.1 [![31.03.2022](https://img.shields.io/date/1648758372)](https://github.com/d8corp/watch-state/tree/v1.1.1)
+- added `iterable` and `asyncIterable`
+
 ### v1.1.0 [![23.03.2022](https://img.shields.io/date/1648055838)](https://github.com/d8corp/watch-state/tree/v1.1.0)
 - added `string`, `fn`, `node` and `promise`
 - changed `async` plugin
