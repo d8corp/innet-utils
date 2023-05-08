@@ -23,4 +23,24 @@ describe('null', () => {
     innet(null, handler)
     expect(log).toBeCalledTimes(1)
   })
+  it('runs for only not null', () => {
+    const [log, logger] = createLogger()
+    const handler = createHandler([
+      nullish([]),
+      logger,
+    ])
+
+    innet(undefined, handler)
+    innet([], handler)
+    innet('null', handler)
+    innet(1, handler)
+    innet({}, handler)
+    innet(new Set(), handler)
+    innet(Symbol(''), handler)
+
+    expect(log).toBeCalledTimes(7)
+
+    innet(null, handler)
+    expect(log).toBeCalledTimes(7)
+  })
 })

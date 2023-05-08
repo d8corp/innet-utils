@@ -29,49 +29,52 @@ yarn add @innet/utils
 
 ## logger
 This function helps to log your application.
+
 ```typescript
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, useApp } from 'innet'
 import { logger } from '@innet/utils'
 
 const handler = createHandler([
-  logger(console.log),
+  logger(() => {
+    console.log(useApp())
+  }),
 ])
 
 innet(1, handler)
-// > 1, handler
+// > 1
 ```
 
-You can pass any function to the logger. The function will get `app` and `handler`.
+You can pass some function to the logger. You can use hooks inside the function.
 
 ## createSubPlugin
 This function helps to create a plugin which contains other plugins.
 
 For example let's create `exist` plugin that uses sub-plugins if app is not `undefined` or `null`.
+
 ```typescript
-import innet from 'innet'
+import innet, { NEXT, useApp, runPlugins } from 'innet'
 import { createSubPlugin } from '@innet/utils'
 
-export const exist = createSubPlugin(
-  (app = null, next, handler, plugins) => {
-    if (app === null) {
-      // run outer plugins
-      return next()
-    }
+const exist = createSubPlugin(
+  plugins => {
+    const app = useApp()
 
-    // run sub plugins
-    return innet(app, handler, plugins)
-  }
+    if (app === null || app === undefined) return NEXT
+
+    runPlugins(app, useHandler(), plugins)
+  },
 )
 ```
 
 Now we can use it.
+
 ```typescript
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, useApp } from 'innet'
 import { logger } from '@innet/utils'
 
 const handler = createHandler([
   exist([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
@@ -80,7 +83,7 @@ innet(undefined, handler)
 // nothing happens
 
 innet('test', handler)
-// > 'test', handler
+// > 'test'
 ```
 
 ## createConditionPlugin
@@ -88,10 +91,12 @@ This function based on `createSubPlugin`, but has simplified interface.
 With it, you can easily eject some types of applications.
 
 For example let's create a plugin to eject numbers.
+
 ```typescript
+import { useApp } from "innet"
 import { createConditionPlugin } from '@innet/utils'
 
-const number = createConditionPlugin(app => typeof app === 'number')
+const number = createConditionPlugin(() => typeof useApp() === 'number')
 ```
 
 ## number
@@ -99,12 +104,12 @@ This plugin is right from the last example.
 Let's take a look at usage.
 
 ```typescript
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, useApp } from 'innet'
 import { number, logger } from '@innet/utils'
 
 const handler = createHandler([
   number([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
@@ -114,19 +119,19 @@ innet('1', handler)
 // nothing happens
 
 innet(1, handler)
-// > 1, handler
+// > 1
 ```
 
 ## string
 This plugin handles only `string` values.
 
 ```typescript
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, useApp } from 'innet'
 import { string, logger } from '@innet/utils'
 
 const handler = createHandler([
   string([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
@@ -135,19 +140,19 @@ innet(1, handler)
 // nothing happens
 
 innet('1', handler)
-// > '1', handler
+// > '1'
 ```
 
 ## fn
 This plugin handles only `function` values.
 
 ```typescript
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, useApp } from 'innet'
 import { fn, logger } from '@innet/utils'
 
 const handler = createHandler([
   fn([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
@@ -157,19 +162,19 @@ innet('1', handler)
 // nothing happens
 
 innet(() => {}, handler)
-// > () => {}, handler
+// > () => {}
 ```
 
 ## node
 This plugin handles only `Node` values.
 
 ```typescript
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, useApp } from 'innet'
 import { node, logger } from '@innet/utils'
 
 const handler = createHandler([
   node([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
@@ -179,36 +184,19 @@ innet('1', handler)
 // nothing happens
 
 innet(document.createElement('div'), handler)
-// > div, handler
+// > div
 ```
-
-## stop
-This is a simple plugin to stop running of plugins and return application as is.
-```typescript
-import innet, { createHandler } from 'innet'
-import { stop, logger } from '@innet/utils'
-
-const handler = createHandler([
-  stop,
-  logger(console.log),
-])
-
-innet(1, handler)
-// nothing happens
-```
-
-The logger will not be run because of the `stop` plugin.
 
 ## promise
 This plugin handles only `promise` values.
 
 ```typescript
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, useApp } from 'innet'
 import { promise, logger } from '@innet/utils'
 
 const handler = createHandler([
   promise([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
@@ -221,20 +209,18 @@ innet(
   new Promise(resolve => resolve()),
   handler,
 )
-// > promise, handler
+// > promise
 ```
 
 ## async
 This plugin helps to work with async, just an example:
 ```typescript
-import innet, { createHandler } from 'innet'
-import { async, promise, logger } from '@innet/utils'
+import innet, { createHandler, useApp } from 'innet'
+import { async, logger } from '@innet/utils'
 
 const handler = createHandler([
-  promise([
-    async,
-  ]),
-  logger(console.log),
+  async,
+  logger(() => console.log(useApp())),
 ])
 
 innet(1, handler)
@@ -246,19 +232,19 @@ innet(app, handler)
 // nothing happens
 
 await app
-// > 'test', handler
+// > 'test'
 ```
 
 ## nullish
 You can use it to eject `null`
 
 ```typescript
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, useApp } from 'innet'
 import { logger, nullish } from '@innet/utils'
 
 const handler = createHandler([
   nullish([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
@@ -267,19 +253,19 @@ innet('test', handler)
 // nothing happens
 
 innet(null, handler)
-// > null, handler
+// > null
 ```
 
 ## object
 You can use it to eject an object
 
 ```typescript
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, useApp } from 'innet'
 import { object, logger } from '@innet/utils'
 
 const handler = createHandler([
   object([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
@@ -288,24 +274,22 @@ innet('test', handler)
 // nothing happens
 
 innet({}, handler)
-// > {}, handler
+// > {}
 
 innet(null, handler)
-// > null, handler
+// > null
 ```
 
 Because of `null` is an object, you get the last console log,
-to prevent it, you can combine the plugin with `nullish` and `stop`
+to prevent it, you can combine the plugin with `nullish`.
 ```typescript
-import innet, { createHandler } from 'innet'
-import { object, logger, nullish, stop } from '@innet/utils'
+import innet, { createHandler, useApp } from 'innet'
+import { object, logger, nullish } from '@innet/utils'
 
 const handler = createHandler([
-  nullish([
-    stop,
-  ]),
+  nullish([]),
   object([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
@@ -315,22 +299,22 @@ innet(null, handler)
 // nothing happens
 
 innet({}, handler)
-// > {}, handler
+// > {}
 
 innet([], handler)
-// > [], handler
+// > []
 ```
 
 ## array
 Because of `array` is an object you get the last console log. To handle an array use plugin of `array`.
 
 ```typescript
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, useApp } from 'innet'
 import { array, logger } from '@innet/utils'
 
 const handler = createHandler([
   array([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
@@ -339,7 +323,7 @@ innet({}, handler)
 // nothing happens
 
 innet([], handler)
-// > [], handler
+// > []
 ```
 
 ### arraySync
@@ -347,219 +331,63 @@ This plugin helps to handle an array synchronously.
 It runs the handler for each item of the array.
 
 ```typescript
-import innet, { createHandler } from 'innet'
-import { array, arraySync, logger } from '@innet/utils'
+import innet, { createHandler, useApp } from 'innet'
+import { arraySync, logger } from '@innet/utils'
 
 const handler = createHandler([
-  array([arraySync]),
-  logger(console.log),
+  arraySync,
+  logger(() => console.log(useApp())),
 ])
 
 innet('test', handler)
-// > 'test', handler.
+// > 'test'.
 
 innet(['test'], handler)
-// > 'test', handler
+// > 'test'
 
 innet(['test1', 'test2'], handler)
-// > 'test1', handler
-// > 'test2', handler
+// > 'test1'
+// > 'test2'
 
 innet(['test1', ['test2', ['test3', 'test4']]], handler)
-// > 'test1', handler
-// > 'test2', handler
-// > 'test3', handler
-// > 'test4', handler
-```
-
-Another example with combination of some plugins.
-```typescript
-import innet, { createHandler } from 'innet'
-import { array, arraySync, number } from '@innet/utils'
-
-const handler = createHandler([
-  array([arraySync]),
-  number([() => app => app + 1]),
-])
-
-console.log(
-  innet(['test1', [1, [12, null]]], handler)
-)
-// > ['test1', [2, [13, null]]]
-```
-
-### arrayAsync
-This plugin helps to handle an array asynchronously.
-
-It runs the handler for each item of the array,
-but if the array contains a promise, it waits for the end of the promise and then handles the next item.
-```typescript
-import innet, { createHandler } from 'innet'
-import { array, arrayAsync, logger } from '@innet/utils'
-
-const handler = createHandler([
-  array([arrayAsync]),
-  logger(console.log),
-])
-
-const promise = new Promise(resolve => resolve('test2'))
-
-innet(['test1', promise, 'test3'], handler)
-// > 'test1', handler
-// > promise, handler
-
-await promise
-// > 'test3', handler
-```
-
-You can combine it with `async` plugin to handle promises.
-```typescript
-import innet, { createHandler } from 'innet'
-import { array, arrayAsync, async, promise, logger } from '@innet/utils'
-
-const handler = createHandler([
-  promise([async]),
-  array([arrayAsync]),
-  logger(console.log),
-])
-
-const promise = new Promise(resolve => resolve('test2'))
-
-const result = innet(['test1', promise, 'test3'], handler)
-// > 'test1', handler
-
-await promise
-// > 'test2', handler
-
-await result
-// > 'test3', handler
-```
-
-If a promise throws an error the handler get stop.
-```typescript
-import innet, { createHandler } from 'innet'
-import { array, arrayAsync, async, promise, logger } from '@innet/utils'
-
-const handler = createHandler([
-  promise([async]),
-  array([arrayAsync]),
-  logger(console.log),
-])
-
-const error = Error()
-const promise = new Promise((resolve, reject) => reject(error))
-
-const result = innet(['test1', promise, 'test2'], handler)
-// > 'test1', handler
-
-try {
-  await result
-} catch (e) {
-  // e === error
-}
-```
-
-`test2` cannot be handled because of `promise` error.
-
-### arrayClear
-This plugin removes `undefined` from array.
-
-```typescript
-import innet, { createHandler } from 'innet'
-import { array, arrayClear } from '@innet/utils'
-
-const handler = createHandler([
-  array([
-    arrayClear,
-  ]),
-])
-
-innet(['test1', undefined, 'test2', undefined], handler)
-// ['test1', 'test2']
-
-innet([undefined, undefined], handler)
-// []
-```
-
-### arraySingleLess
-This plugin removes arrays with a single value.
-
-```typescript
-import innet, { createHandler } from 'innet'
-import { array, arraySync, arraySingleLess } from '@innet/utils'
-
-const handler = createHandler([
-  array([
-    arraySync,
-    arraySingleLess,
-  ]),
-])
-
-innet(['test1'], handler)
-// 'test1'
-
-innet(['test1', 'test2'], handler)
-// ['test1', 'test2']
-
-innet(['test1', ['test2']], handler)
-// ['test1', 'test2']
-
-innet(['test1', []], handler)
-// ['test1', undefined]
-```
-
-You can combine `arraySingleLess` with `arrayClear`
-```typescript
-import innet, { createHandler } from 'innet'
-import { array, arraySync, arrayClear, arraySingleLess } from '@innet/utils'
-
-const handler = createHandler([
-  array([
-    arraySync,
-    arrayClear,
-    arraySingleLess,
-  ]),
-])
-
-innet(['test1', []], handler)
-// 'test1'
-
-innet(['test1', ['test2', undefined]], handler)
-// ['test1', 'test2]
+// > 'test1'
+// > 'test2'
+// > 'test3'
+// > 'test4'
 ```
 
 ### iterable
-You can use it to eject iterable objects
+You can use it to eject iterable objects.
 
 ```typescript
-import innet, { createHandler } from 'innet'
-import { .iterable, logger } from '@innet/utils'
+import innet, { createHandler, useApp } from 'innet'
+import { iterable, logger } from '@innet/utils'
 
 const handler = createHandler([
   iterable([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
 innet([1, 2, 3], handler)
-// [1, 2, 3], handler
+// [1, 2, 3]
 innet(new Set([1, 2, 3]), handler)
-// Set([1, 2, 3]), handler
+// Set([1, 2, 3])
 
 innet({}, handler)
 // nothing happens
 ```
 
 ### asyncIterable
-You can use it to eject async iterable objects
+You can use it to eject async iterable objects.
 
 ```typescript
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, useApp } from 'innet'
 import { asyncIterable, logger } from '@innet/utils'
 
 const handler = createHandler([
   asyncIterable([
-    logger(console.log),
+    logger(() => console.log(useApp())),
   ]),
 ])
 
@@ -570,7 +398,7 @@ innet(new Set([1, 2, 3]), handler)
 async function * test () {}
 
 innet(test(), handler)
-// Promise, handler
+// Promise
 ```
 
 ## Issues

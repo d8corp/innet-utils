@@ -2,9 +2,6 @@ import {
   activatePlugins,
   type HandlerPlugin,
   type Plugin,
-  runPlugins,
-  useApp,
-  useHandler,
 } from 'innet'
 
 export interface SubPlugin {
@@ -28,7 +25,7 @@ export function createSubPlugin (plugin: HandlerSubPlugin, key = Symbol('createS
     }
 
     return () => {
-      plugin(handler[key])
+      return plugin(handler[key])
     }
   }
 }

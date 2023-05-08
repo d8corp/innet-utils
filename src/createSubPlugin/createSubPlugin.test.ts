@@ -19,9 +19,9 @@ describe('createSubPlugins', () => {
       plugins => {
         const app = useApp()
 
-        return app === null || app === undefined
-          ? NEXT
-          : runPlugins(app, useHandler(), plugins)
+        if (app === null || app === undefined) return NEXT
+
+        runPlugins(app, useHandler(), plugins)
       },
     )
 
