@@ -1,13 +1,14 @@
 import innet, { createHandler } from 'innet'
 
-import { logger, number } from '..'
+import { createLogger } from '../testUtils'
+import { number } from '.'
 
 describe('number', () => {
   test('example', () => {
-    const log = jest.fn()
+    const [log, logger] = createLogger()
 
     const handler = createHandler([
-      number([logger(log)]),
+      number([logger]),
     ])
 
     innet(null, handler)
@@ -19,6 +20,6 @@ describe('number', () => {
     innet(1, handler)
 
     expect(log).toBeCalledTimes(1)
-    expect(log).toBeCalledWith(1, handler)
+    expect(log).toBeCalledWith(1)
   })
 })

@@ -1,10 +1,10 @@
-import { Plugin } from 'innet'
+import { NEXT, type Plugin } from 'innet'
 
-export type LoggerCallback = (app, handler) => any
+export type LoggerCallback = () => void
 
 export function logger (callback: LoggerCallback): Plugin {
-  return () => (app, next, handler) => {
-    callback(app, handler)
-    return next()
+  return () => () => {
+    callback()
+    return NEXT
   }
 }

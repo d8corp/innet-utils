@@ -1,13 +1,15 @@
 import innet, { createHandler } from 'innet'
 
-import { node } from '..'
+import { createLogger } from '../testUtils'
+import { node } from '.'
 
 describe('node', () => {
   it('runs for only node', () => {
-    let count = 0
-    const log = () => () => count++
+    const [log, logger] = createLogger()
     const handler = createHandler([
-      node([log])
+      node([
+        logger,
+      ]),
     ])
 
     innet(undefined, handler)
@@ -15,15 +17,15 @@ describe('node', () => {
     innet(1, handler)
     innet({}, handler)
     innet(new Set(), handler)
-    innet(Symbol(), handler)
+    innet(Symbol(''), handler)
     innet(null, handler)
     innet('null', handler)
     innet(new Promise(resolve => resolve(undefined)), handler)
     innet(() => {}, handler)
 
-    expect(count).toBe(0)
+    expect(log).toBeCalledTimes(0)
 
     innet(document.createElement('div'), handler)
-    expect(count).toBe(1)
+    expect(log).toBeCalledTimes(1)
   })
 })

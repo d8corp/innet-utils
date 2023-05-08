@@ -1,25 +1,35 @@
-import innet, { createHandler, PluginHandler } from 'innet'
+import innet, { createHandler, NEXT, type Plugin, runPlugins, useApp, useHandler } from 'innet'
 
 import { createSubPlugin } from '.'
 
+function createLogger () {
+  const log = jest.fn()
+  const plugin: Plugin = () => () => {
+    log(useApp())
+  }
+
+  return [log, plugin]
+}
+
 describe('createSubPlugins', () => {
   test('exist', () => {
-    const log = jest.fn()
-
-    function logger (): PluginHandler {
-      return (app, next) => {
-        log(app)
-        return next()
-      }
-    }
+    const [log, logger] = createLogger()
 
     const exist = createSubPlugin(
-      (app = null, next, handler, plugins) => app === null
-        ? next()
-        : innet(app, handler, plugins),
+      plugins => {
+        const app = useApp()
+
+        return app === null || app === undefined
+          ? NEXT
+          : runPlugins(app, useHandler(), plugins)
+      },
     )
 
-    const handler = createHandler([exist([logger])])
+    const handler = createHandler([
+      exist([
+        logger,
+      ]),
+    ])
 
     expect(log).not.toBeCalled()
 

@@ -1,3 +1,5 @@
+import { useApp } from 'innet'
+
 import { createConditionPlugin } from '../createConditionPlugin'
 
-export const promise = createConditionPlugin(app => app instanceof Promise)
+export const promise = createConditionPlugin(() => useApp() instanceof Promise)

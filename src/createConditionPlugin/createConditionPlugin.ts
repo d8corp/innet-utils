@@ -1,16 +1,18 @@
-import innet from 'innet'
+import { NEXT, runPlugins, useApp, useHandler } from 'innet'
 
-import { createSubPlugin, SubPlugin } from '../createSubPlugin'
+import { createSubPlugin, type SubPlugin } from '../createSubPlugin'
 
 export interface Condition {
-  (app: any): boolean
+  (): boolean
 }
 
-export function createConditionPlugin (condition: Condition, key?: string): SubPlugin {
+export function createConditionPlugin (condition: Condition, key?: symbol): SubPlugin {
   return createSubPlugin(
-    (app, next, handler, plugins) => (
-      condition(app) ? innet(app, handler, plugins) : next()
-    ),
+    plugins => {
+      if (!condition()) return NEXT
+
+      runPlugins(useApp(), useHandler(), plugins)
+    },
     key,
   )
 }

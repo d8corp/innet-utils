@@ -1,3 +1,5 @@
+import { useApp } from 'innet'
+
 import { createConditionPlugin } from '../createConditionPlugin'
 
-export const nullish = createConditionPlugin(app => app === null)
+export const nullish = createConditionPlugin(() => useApp() === null)

@@ -1,13 +1,13 @@
 import innet, { createHandler } from 'innet'
 
-import { string } from '..'
+import { createLogger } from '../testUtils'
+import { string } from '.'
 
 describe('string', () => {
   it('runs for only string', () => {
-    let count = 0
-    const log = () => () => count++
+    const [log, logger] = createLogger()
     const handler = createHandler([
-      string([log])
+      string([logger]),
     ])
 
     innet(undefined, handler)
@@ -15,12 +15,12 @@ describe('string', () => {
     innet(1, handler)
     innet({}, handler)
     innet(new Set(), handler)
-    innet(Symbol(), handler)
+    innet(Symbol(''), handler)
     innet(null, handler)
 
-    expect(count).toBe(0)
+    expect(log).toBeCalledTimes(0)
 
     innet('null', handler)
-    expect(count).toBe(1)
+    expect(log).toBeCalledTimes(1)
   })
 })

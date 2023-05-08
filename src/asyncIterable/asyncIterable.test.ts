@@ -1,14 +1,22 @@
-import innet, { createHandler } from 'innet'
+import innet, { createHandler, type Plugin, useApp } from 'innet'
 
-import { logger } from '../logger'
 import { asyncIterable } from './asyncIterable'
+
+function createLogger () {
+  const log = jest.fn()
+  const plugin: Plugin = () => () => {
+    log(useApp())
+  }
+
+  return [log, plugin]
+}
 
 describe('asyncIterable', () => {
   it('works', () => {
-    const log = jest.fn()
+    const [log, logger] = createLogger()
     const handler = createHandler([
       asyncIterable([
-        logger(log),
+        logger,
       ]),
     ])
 

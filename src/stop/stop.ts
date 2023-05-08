@@ -1,5 +1,5 @@
-import { PluginHandler } from 'innet'
+import { type HandlerPlugin } from 'innet'
 
-export function stop (): PluginHandler {
-  return app => app
+export function stop (): HandlerPlugin {
+  return () => {}
 }

@@ -1,23 +1,34 @@
-import { Handler, Next, Plugin, PluginHandler } from 'innet'
+import {
+  activatePlugins,
+  type HandlerPlugin,
+  type Plugin,
+  runPlugins,
+  useApp,
+  useHandler,
+} from 'innet'
 
 export interface SubPlugin {
   (plugins: Plugin[]): Plugin
 }
 
-export interface SubPluginHandler {
-  (app, next: Next, handler: Handler, plugins: PluginHandler[]): any
+export interface HandlerSubPlugin {
+  (plugins: HandlerPlugin[]): void
 }
 
-export function createSubPlugin (plugin: SubPluginHandler, key = Symbol('createTypePlugin key') as unknown as string): SubPlugin {
-  return (plugins) => handler => {
-    const pluginHandlers = plugins.map(plugin => plugin(handler))
+export function createSubPlugin (plugin: HandlerSubPlugin, key = Symbol('createSubPlugin key')): SubPlugin {
+  return plugins => handler => {
+    const handlerPlugins: HandlerPlugin[] = []
+
+    activatePlugins(plugins, handlerPlugins, handler)
 
     if (key in handler) {
-      handler[key] = handler[key].concat(pluginHandlers)
+      handler[key] = handler[key].concat(handlerPlugins)
     } else {
-      handler[key] = pluginHandlers
+      handler[key] = handlerPlugins
     }
 
-    return (app, next, handler) => plugin(app, next, handler, handler[key])
+    return () => {
+      plugin(handler[key])
+    }
   }
 }

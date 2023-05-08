@@ -1,3 +1,5 @@
+import { useApp } from 'innet'
+
 import { createConditionPlugin } from '../createConditionPlugin'
 
-export const object = createConditionPlugin(app => typeof app === 'object')
+export const object = createConditionPlugin(() => typeof useApp() === 'object')

@@ -1,13 +1,14 @@
 import innet, { createHandler } from 'innet'
 
-import { iterable, logger, object } from '..'
+import { createLogger } from '../testUtils'
+import { iterable } from '.'
 
 describe('iterable', () => {
   it('works', () => {
-    const log = jest.fn()
+    const [log, logger] = createLogger()
     const handler = createHandler([
       iterable([
-        logger(log),
+        logger,
       ]),
     ])
 

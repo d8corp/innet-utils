@@ -1,43 +1,34 @@
 import innet, { createHandler } from 'innet'
 
-import { array, arraySync, logger, number } from '../..'
+import { createLogger } from '../../testUtils'
+import { arraySync } from '.'
 
 describe('arraySync', () => {
   test('example1', () => {
-    const log = jest.fn()
+    const [log, logger] = createLogger()
 
     const handler = createHandler([
-      array([arraySync]),
-      logger(log),
+      arraySync,
+      logger,
     ])
 
     innet('test1', handler)
     expect(log).toBeCalledTimes(1)
-    expect(log).toBeCalledWith('test1', handler)
+    expect(log).toBeCalledWith('test1')
 
     innet(['test2', 'test3'], handler)
 
     expect(log).toBeCalledTimes(3)
-    expect(log).toBeCalledWith('test2', handler)
-    expect(log).toBeCalledWith('test3', handler)
+    expect(log).toBeCalledWith('test2')
+    expect(log).toBeCalledWith('test3')
 
     innet(['test4', ['test5', 'test6', ['test7', 'test8']]], handler)
 
     expect(log).toBeCalledTimes(8)
-    expect(log).toBeCalledWith('test4', handler)
-    expect(log).toBeCalledWith('test5', handler)
-    expect(log).toBeCalledWith('test6', handler)
-    expect(log).toBeCalledWith('test7', handler)
-    expect(log).toBeCalledWith('test8', handler)
-  })
-  test('example2', () => {
-    const handler = createHandler([
-      array([arraySync]),
-      number([() => app => app + 1]),
-    ])
-
-    const result = innet(['test1', [1, [12, null]]], handler)
-
-    expect(result).toEqual(['test1', [2, [13, null]]])
+    expect(log).toBeCalledWith('test4')
+    expect(log).toBeCalledWith('test5')
+    expect(log).toBeCalledWith('test6')
+    expect(log).toBeCalledWith('test7')
+    expect(log).toBeCalledWith('test8')
   })
 })

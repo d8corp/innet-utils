@@ -1,5 +1,13 @@
-import innet, { PluginHandler } from 'innet'
+import innet, { type HandlerPlugin, NEXT, useApp, useHandler } from 'innet'
 
-export function async (): PluginHandler {
-  return (app, next, handler) => app.then(data => innet(data, handler))
+export function async (): HandlerPlugin {
+  return () => {
+    const app = useApp()
+
+    if (!(app instanceof Promise)) return NEXT
+
+    const handler = useHandler()
+
+    app.then(data => innet(data, handler))
+  }
 }
