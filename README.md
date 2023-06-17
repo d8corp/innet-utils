@@ -224,7 +224,7 @@ const handler = createHandler([
 ])
 
 innet(1, handler)
-// > 1, handler
+// > 1
 
 const app = new Promise(resolve => resolve('test'))
 

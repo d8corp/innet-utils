@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "target": "ES5",
+    "target": "ES6",
     "lib": [
       "dom",
       "dom.iterable",
@@ -12,13 +11,11 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "declaration": true,
-    "jsx": "preserve",
   },
   "include": [
     "src"
