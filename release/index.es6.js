@@ -18,3 +18,5 @@ export { iterable } from './plugins/condition/iterable/iterable.es6.js';
 export { callHandler } from './handlers/callHandler/callHandler.es6.js';
 export { createSubPlugin } from './utils/createSubPlugin/createSubPlugin.es6.js';
 export { createConditionPlugin } from './utils/createConditionPlugin/createConditionPlugin.es6.js';
+export { Ref } from './utils/Ref/Ref.es6.js';
+export { lcs } from './utils/lcs/lcs.es6.js';

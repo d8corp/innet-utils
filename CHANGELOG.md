@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0
+
+### v2.0.0 [![03.11.2025](https://img.shields.io/date/1762166659)](https://github.com/d8corp/watch-state/tree/v2.0.0)
+- added `lcs` and `Ref`
+
 ## v1.1
 
 ### v1.1.1 [![31.03.2022](https://img.shields.io/date/1648758372)](https://github.com/d8corp/watch-state/tree/v1.1.1)

@@ -22,6 +22,8 @@ var iterable = require('./plugins/condition/iterable/iterable.js');
 var callHandler = require('./handlers/callHandler/callHandler.js');
 var createSubPlugin = require('./utils/createSubPlugin/createSubPlugin.js');
 var createConditionPlugin = require('./utils/createConditionPlugin/createConditionPlugin.js');
+var Ref = require('./utils/Ref/Ref.js');
+var lcs = require('./utils/lcs/lcs.js');
 
 
 
@@ -42,3 +44,5 @@ exports.iterable = iterable.iterable;
 exports.callHandler = callHandler.callHandler;
 exports.createSubPlugin = createSubPlugin.createSubPlugin;
 exports.createConditionPlugin = createConditionPlugin.createConditionPlugin;
+exports.Ref = Ref.Ref;
+exports.lcs = lcs.lcs;
