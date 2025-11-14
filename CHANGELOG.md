@@ -2,6 +2,9 @@
 
 ## v2.0
 
+### v2.0.1 [![14.11.2025](https://img.shields.io/date/1763141351)](https://github.com/d8corp/watch-state/tree/v2.0.1)
+- supports `innet@2.0.0-beta.2`
+
 ### v2.0.0 [![03.11.2025](https://img.shields.io/date/1762166659)](https://github.com/d8corp/watch-state/tree/v2.0.0)
 - added `lcs` and `Ref`
 
