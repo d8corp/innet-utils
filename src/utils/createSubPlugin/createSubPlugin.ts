@@ -14,18 +14,14 @@ export interface HandlerSubPlugin {
 
 export function createSubPlugin (plugin: HandlerSubPlugin, key = Symbol('createSubPlugin key')): SubPlugin {
   return plugins => handler => {
-    const handlerPlugins: HandlerPlugin[] = []
+    const result = key in handler ? undefined : () => plugin(handler[key])
 
-    activatePlugins(plugins, handlerPlugins, handler)
-
-    if (key in handler) {
-      handler[key] = handler[key].concat(handlerPlugins)
-    } else {
-      handler[key] = handlerPlugins
+    if (!(key in handler)) {
+      handler[key] = []
     }
 
-    return () => {
-      return plugin(handler[key])
-    }
+    activatePlugins(plugins, handler[key], handler)
+
+    return result
   }
 }
