@@ -10,7 +10,7 @@ function createConditionPlugin(condition, key) {
     return createSubPlugin.createSubPlugin(plugins => {
         if (!condition())
             return innet.NEXT;
-        innet.runPlugins(innet.useApp(), innet.useHandler(), plugins);
+        innet.runPlugins(plugins);
     }, key);
 }
 

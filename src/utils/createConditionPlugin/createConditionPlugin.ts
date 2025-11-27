@@ -1,4 +1,4 @@
-import { NEXT, runPlugins, useApp, useHandler } from 'innet'
+import { NEXT, runPlugins } from 'innet'
 
 import { createSubPlugin, type SubPlugin } from '../createSubPlugin'
 
@@ -11,7 +11,7 @@ export function createConditionPlugin (condition: Condition, key?: symbol): SubP
     plugins => {
       if (!condition()) return NEXT
 
-      runPlugins(useApp(), useHandler(), plugins)
+      runPlugins(plugins)
     },
     key,
   )

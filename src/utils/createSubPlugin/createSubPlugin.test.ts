@@ -1,4 +1,4 @@
-import innet, { createHandler, NEXT, type Plugin, runPlugins, useApp, useHandler } from 'innet'
+import innet, { createHandler, NEXT, type Plugin, runPlugins, useApp } from 'innet'
 import { type HandlerPlugin } from 'innet/types'
 
 import { createSubPlugin } from '.'
@@ -23,7 +23,7 @@ describe('createSubPlugins', () => {
 
         if (app === null || app === undefined) return NEXT
 
-        runPlugins(app, useHandler(), plugins)
+        runPlugins(plugins)
       },
     )
 
@@ -65,7 +65,7 @@ describe('createSubPlugins', () => {
 
         if (app === null || app === undefined) return NEXT
 
-        runPlugins(app, useHandler(), plugins)
+        runPlugins(plugins)
       },
     )
 
