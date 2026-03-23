@@ -1,4 +1,4 @@
-import innet, { createHandler, NEXT, type Plugin, useApp, useHandler } from 'innet'
+import { createHandler, innet, NEXT, type Plugin, useApp, useHandler } from 'innet'
 
 import { createLogger } from '../../../testUtils'
 import { async } from '.'

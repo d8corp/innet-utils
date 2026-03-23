@@ -1,4 +1,4 @@
-import innet, { createHandler } from 'innet'
+import { createHandler, innet } from 'innet'
 
 import { call } from './call'
 

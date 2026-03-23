@@ -1,4 +1,4 @@
-import innet, { type HandlerPlugin, NEXT, useApp, useHandler } from 'innet'
+import { type HandlerPlugin, innet, NEXT, useApp, useHandler } from 'innet'
 
 export function arraySync (): HandlerPlugin {
   return () => {

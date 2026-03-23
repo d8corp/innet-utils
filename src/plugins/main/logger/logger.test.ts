@@ -1,4 +1,4 @@
-import innet, { createHandler, useApp } from 'innet'
+import { createHandler, innet, useApp } from 'innet'
 
 import { logger } from '.'
 

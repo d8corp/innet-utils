@@ -1,4 +1,4 @@
-import innet, { createHandler, type Plugin, useApp } from 'innet'
+import { createHandler, innet, type Plugin, useApp } from 'innet'
 
 import { asyncIterable } from './asyncIterable'
 

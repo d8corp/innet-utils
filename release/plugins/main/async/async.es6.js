@@ -1,4 +1,4 @@
-import innet, { useApp, NEXT, useHandler } from 'innet';
+import { useApp, NEXT, useHandler, innet } from 'innet';
 
 function async() {
     return () => {

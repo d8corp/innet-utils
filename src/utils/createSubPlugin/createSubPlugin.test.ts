@@ -1,4 +1,4 @@
-import innet, { createHandler, NEXT, type Plugin, runPlugins, useApp } from 'innet'
+import { createHandler, innet, NEXT, type Plugin, runPlugins, useApp } from 'innet'
 import { type HandlerPlugin } from 'innet/types'
 
 import { createSubPlugin } from '.'
